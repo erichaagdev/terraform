@@ -19,8 +19,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Setup Terraform
-      run: wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.0.4/terraform_1.0.4_linux_amd64.zip && unzip -qq terraform.zip && chmod +x ./terraform && ./terraform version
+    - name: Terraform Setup
+      run: wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.0.4/terraform_1.0.4_linux_amd64.zip && unzip -qq terraform.zip && chmod +x ./terraform
+
+    - name: Terraform Version
+      run: ./terraform version
 
 #     - name: Terraform Init
 #       run: terraform init
