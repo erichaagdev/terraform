@@ -11,6 +11,8 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: production
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     defaults:
       run:
         shell: bash
@@ -21,8 +23,8 @@ jobs:
 
     - name: Terraform Setup
       run: > 
-        wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.0.4/terraform_1.0.4_linux_amd64.zip 
-        && unzip -qq terraform.zip 
+        wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.0.4/terraform_1.0.4_linux_amd64.zip
+        && unzip -qq terraform.zip
         && chmod +x ./terraform
 
     - name: Terraform Format
