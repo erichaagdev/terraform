@@ -2,6 +2,13 @@ variable "namespace" {
   default = "coruscant"
 }
 
+terraform {
+  backend "gcs" {
+    bucket = "gorlah"
+    prefix = "terraform/state"
+  }
+}
+
 provider "google" {
   project = "gorlah"
   region  = "us-central1"
