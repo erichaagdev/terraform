@@ -16,8 +16,7 @@ provider "google" {
 }
 
 resource "google_service_account" "service-account" {
-  account_id   = "${var.namespace}-service-account"
-  display_name = "Coruscant Service Account"
+  account_id = "${var.namespace}-service-account"
 }
 
 resource "google_container_cluster" "cluster" {
