@@ -40,22 +40,17 @@ resource "google_container_node_pool" "primary-node-pool" {
   node_config {
     machine_type    = "e2-medium"
     service_account = google_service_account.service-account.email
+
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
+
     metadata = {
       disable-legacy-endpoints = true
     }
+
+    tags = [
+      "${var.namespace}-node"
+    ]
   }
-}
-
-resource "google_compute_network" "vpc" {
-  name                    = "${var.namespace}-vpc"
-  auto_create_subnetworks = false
-}
-
-resource "google_compute_subnetwork" "subnet" {
-  name          = "${var.namespace}-subnet"
-  network       = google_compute_network.vpc.name
-  ip_cidr_range = "10.10.0.0/24"
 }
