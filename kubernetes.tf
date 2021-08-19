@@ -25,11 +25,6 @@ resource "helm_release" "ingress-nginx" {
   create_namespace = true
 
   set {
-    name  = "controller.service.externalIPs[0]"
-    value = "10.10.0.4"
-  }
-
-  set {
     name  = "controller.service.type"
     value = "NodePort"
   }
@@ -53,5 +48,11 @@ resource "helm_release" "ingress-nginx" {
 resource "kubernetes_namespace" "example-namespace" {
   metadata {
     name = "test"
+  }
+}
+
+resource "null_resource" "assign-internal-ip" {
+  provisioner "local-exec" {
+    command = "/bin/sh assign-internal-ip.sh ${helm_release.ingress-nginx.name} ${google_container_node_pool.primary-node-pool.name}"
   }
 }

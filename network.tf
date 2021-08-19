@@ -20,6 +20,12 @@ resource "google_compute_firewall" "firewall" {
   }
 }
 
-resource "google_compute_address" "static_ip_address" {
+resource "google_compute_address" "static-ip" {
   name = "${var.namespace}-static-ip"
+}
+
+resource "null_resource" "assign-ip" {
+  provisioner "local-exec" {
+    command = "/bin/sh assign-ip.sh ${google_compute_address.static-ip.address}"
+  }
 }
