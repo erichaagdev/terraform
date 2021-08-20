@@ -52,7 +52,11 @@ resource "kubernetes_namespace" "example-namespace" {
 }
 
 resource "null_resource" "assign-internal-ip" {
+  triggers = {
+    ingress_nginx = helm_release.ingress-nginx.id
+    primary_node_pool = google_container_node_pool.primary-node-pool.id
+  }
   provisioner "local-exec" {
-    command = "/bin/sh assign-internal-ip.sh ${helm_release.ingress-nginx.name} ${google_container_node_pool.primary-node-pool.name}"
+    command = "/bin/sh assign-internal-ip.sh"
   }
 }

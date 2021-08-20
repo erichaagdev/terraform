@@ -25,6 +25,9 @@ resource "google_compute_address" "static-ip" {
 }
 
 resource "null_resource" "assign-ip" {
+  triggers = {
+    static_ip = google_compute_address.static-ip.address
+  }
   provisioner "local-exec" {
     command = "/bin/sh assign-ip.sh ${google_compute_address.static-ip.address}"
   }
