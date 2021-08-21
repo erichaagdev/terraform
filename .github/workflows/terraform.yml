@@ -23,7 +23,11 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Google Login
-      run: echo $GOOGLE_CREDENTIALS > account.json | gcloud auth activate-service-account --key-file=account.json && rm account.json
+      run: >
+        echo $GOOGLE_CREDENTIALS > account.json
+        && gcloud auth activate-service-account --key-file=account.json
+        && rm account.json
+        && gcloud config set project $(echo $GOOGLE_CREDENTIALS | jq -r '.project_id')
 
     - name: Terraform Setup
       run: > 
