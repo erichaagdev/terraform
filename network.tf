@@ -26,10 +26,11 @@ resource "google_compute_address" "static-ip" {
 
 resource "null_resource" "assign-external-ip" {
   triggers = {
+    primary_node_pool = google_container_node_pool.primary-node-pool.id
     static_ip = google_compute_address.static-ip.address
   }
   provisioner "local-exec" {
-    command = "/bin/sh assign-external-ip.sh ${google_compute_address.static-ip.address}"
+    command = "/bin/sh assign-external-ip.sh ${var.cluster-name} ${google_compute_address.static-ip.address}"
   }
 }
 
