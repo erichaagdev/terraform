@@ -22,6 +22,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Google Login
+      run: echo $GOOGLE_CREDENTIALS > account.json | gcloud auth activate-service-account --key-file=account.json && rm account.json
+
     - name: Terraform Setup
       run: > 
         wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.0.4/terraform_1.0.4_linux_amd64.zip
