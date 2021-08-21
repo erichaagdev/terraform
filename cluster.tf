@@ -1,19 +1,9 @@
-provider "google" {
-  project = "gorlah"
-  region  = "us-central1"
-  zone    = "us-central1-c"
-}
-
-data "google_client_config" "provider" {
-
-}
-
 resource "google_service_account" "service-account" {
-  account_id = "${var.namespace}-service-account"
+  account_id = "${var.cluster-name}-service-account"
 }
 
 resource "google_container_cluster" "cluster" {
-  name                     = "${var.namespace}-cluster"
+  name                     = "${var.cluster-name}-cluster"
   initial_node_count       = 1
   logging_service          = "none"
   monitoring_service       = "none"
@@ -33,7 +23,7 @@ resource "google_container_cluster" "cluster" {
 }
 
 resource "google_container_node_pool" "primary-node-pool" {
-  name       = "${var.namespace}-primary-node-pool"
+  name       = "${var.cluster-name}-primary-node-pool"
   cluster    = google_container_cluster.cluster.name
   node_count = 1
 
@@ -51,7 +41,7 @@ resource "google_container_node_pool" "primary-node-pool" {
     }
 
     tags = [
-      "${var.namespace}-node"
+      "${var.cluster-name}-node"
     ]
   }
 }
