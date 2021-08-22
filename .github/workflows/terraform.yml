@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: Terraform
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: Terraform
     runs-on: ubuntu-latest
     environment: production
     env:
@@ -25,16 +25,8 @@ jobs:
     - name: Google Login
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: >
-        echo $GOOGLE_CREDENTIALS > account.json
-        && gcloud auth activate-service-account --key-file=account.json
-        && rm account.json
+        echo $GOOGLE_CREDENTIALS | gcloud auth activate-service-account --key-file -
         && gcloud config set project $(echo $GOOGLE_CREDENTIALS | jq -r '.project_id')
-
-    - name: Terraform Setup
-      run: > 
-        wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.0.4/terraform_1.0.4_linux_amd64.zip
-        && unzip -qq terraform.zip
-        && chmod +x ./terraform
 
     - name: Terraform Format
       run: terraform fmt -check -recursive
@@ -43,6 +35,7 @@ jobs:
       run: terraform init
 
     - name: Terraform Plan
+      if: github.ref != 'refs/heads/main' && github.event_name == 'push'
       run: terraform plan
 
     - name: Terraform Apply
