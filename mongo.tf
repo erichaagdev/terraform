@@ -83,7 +83,7 @@ resource "kubernetes_stateful_set" "mongo-stateful-set" {
       }
 
       spec {
-        access_modes = ["ReadWriteOnce"]
+        access_modes       = ["ReadWriteOnce"]
         storage_class_name = "standard"
 
         resources {
