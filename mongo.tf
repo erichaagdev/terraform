@@ -1,5 +1,5 @@
-variable "mongo-pod-selector" {
-  default = "mongo"
+locals {
+  mongo-pod-selector = "mongo"
 }
 
 resource "kubernetes_namespace" "mongo-namespace" {
@@ -14,7 +14,7 @@ resource "kubernetes_service" "mongo-service" {
     namespace = kubernetes_namespace.mongo-namespace.metadata[0].name
 
     labels = {
-      app = var.mongo-pod-selector
+      app = local.mongo-pod-selector
     }
   }
 
@@ -26,7 +26,7 @@ resource "kubernetes_service" "mongo-service" {
     }
 
     selector = {
-      app = var.mongo-pod-selector
+      app = local.mongo-pod-selector
     }
   }
 }
@@ -37,7 +37,7 @@ resource "kubernetes_stateful_set" "mongo-stateful-set" {
     namespace = kubernetes_namespace.mongo-namespace.metadata[0].name
 
     labels = {
-      app = var.mongo-pod-selector
+      app = local.mongo-pod-selector
     }
   }
 
@@ -47,14 +47,14 @@ resource "kubernetes_stateful_set" "mongo-stateful-set" {
 
     selector {
       match_labels = {
-        app = var.mongo-pod-selector
+        app = local.mongo-pod-selector
       }
     }
 
     template {
       metadata {
         labels = {
-          app = var.mongo-pod-selector
+          app = local.mongo-pod-selector
         }
       }
 

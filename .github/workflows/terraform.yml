@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      ERICHAAG_IO_PASSWORD: ${{ secrets.ERICHAAG_IO_PASSWORD }}
+      TF_VAR_erichaag_io_dns_password: ${{ secrets.TF_VAR_ERICHAAG_IO_DNS_PASSWORD }}
+      TF_VAR_gorlah_com_dns_password: ${{ secrets.TF_VAR_GORLAH_COM_DNS_PASSWORD }}
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     defaults:
       run:
