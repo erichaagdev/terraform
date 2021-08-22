@@ -33,6 +33,6 @@ resource "null_resource" "assign-internal-ip" {
     primary_node_pool = google_container_node_pool.primary-node-pool.id
   }
   provisioner "local-exec" {
-    command = "/bin/sh assign-internal-ip.sh ${var.cluster-name}-cluster ${data.google_client_config.current.zone}"
+    command = "/bin/sh ./scripts/assign-internal-ip.sh ${var.cluster-name}-cluster ${data.google_client_config.current.zone}"
   }
 }

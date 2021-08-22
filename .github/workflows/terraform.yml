@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      ERICHAAG_IO: ${{ secrets.ERICHAAG_IO }}
+      ERICHAAG_IO_PASSWORD: ${{ secrets.ERICHAAG_IO_PASSWORD }}
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     defaults:
       run:

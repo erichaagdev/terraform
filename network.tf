@@ -30,7 +30,7 @@ resource "null_resource" "assign-external-ip" {
     static_ip         = google_compute_address.static-ip.address
   }
   provisioner "local-exec" {
-    command = "/bin/sh assign-external-ip.sh ${var.cluster-name}-cluster ${data.google_client_config.current.zone} ${google_compute_address.static-ip.address}"
+    command = "/bin/sh ./scripts/assign-external-ip.sh ${var.cluster-name}-cluster ${data.google_client_config.current.zone} ${google_compute_address.static-ip.address}"
   }
 }
 
@@ -39,6 +39,6 @@ resource "null_resource" "update-namecheap-ip" {
     static_ip = google_compute_address.static-ip.address
   }
   provisioner "local-exec" {
-    command = "/bin/sh update-namecheap-ip.sh ${google_compute_address.static-ip.address}"
+    command = "/bin/sh ./scripts/update-namecheap-ip.sh ${google_compute_address.static-ip.address}"
   }
 }
