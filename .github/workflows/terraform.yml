@@ -14,6 +14,7 @@ jobs:
     env:
       TF_VAR_erichaag_io_dns_password: ${{ secrets.TF_VAR_ERICHAAG_IO_DNS_PASSWORD }}
       TF_VAR_gorlah_com_dns_password: ${{ secrets.TF_VAR_GORLAH_COM_DNS_PASSWORD }}
+      TF_VAR_mamamech_rocks_dns_password: ${{ secrets.TF_VAR_MAMAMECH_ROCKS_DNS_PASSWORD }}
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     defaults:
       run:

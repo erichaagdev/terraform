@@ -62,3 +62,17 @@ resource "null_resource" "gorlah-com-dns" {
     command = "/bin/sh ./scripts/update-namecheap-ip.sh gorlah.com ${google_compute_address.static-ip.address} ${var.gorlah_com_dns_password}"
   }
 }
+
+variable "mamamech_rocks_dns_password" {
+  sensitive = true
+}
+
+resource "null_resource" "mamamech-rocks-dns" {
+  triggers = {
+    static_ip = google_compute_address.static-ip.address
+  }
+
+  provisioner "local-exec" {
+    command = "/bin/sh ./scripts/update-namecheap-ip.sh mamamech.rocks ${google_compute_address.static-ip.address} ${var.mamamech_rocks_dns_password}"
+  }
+}
