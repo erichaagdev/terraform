@@ -1,11 +1,17 @@
+locals {
+  bucket      = "gorlah-certs"
+  private-key = "domains/%s/certificates/privkey.pem"
+  public-key  = "domains/%s/certificates/fullchain.pem"
+}
+
 data "google_storage_bucket_object_content" "erichaag-io-public-key" {
-  name   = "certificates/erichaag.io/fullchain.pem"
-  bucket = "gorlah"
+  name   = format(local.public-key, "erichaag.io")
+  bucket = local.bucket
 }
 
 data "google_storage_bucket_object_content" "erichaag-io-private-key" {
-  name   = "certificates/erichaag.io/privkey.pem"
-  bucket = "gorlah"
+  name   = format(local.private-key, "erichaag.io")
+  bucket = local.bucket
 }
 
 resource "kubernetes_secret" "erichaag-io-tls-default" {
@@ -23,13 +29,13 @@ resource "kubernetes_secret" "erichaag-io-tls-default" {
 }
 
 data "google_storage_bucket_object_content" "gorlah-com-public-key" {
-  name   = "certificates/gorlah.com/fullchain.pem"
-  bucket = "gorlah"
+  name   = format(local.public-key, "gorlah.com")
+  bucket = local.bucket
 }
 
 data "google_storage_bucket_object_content" "gorlah-com-private-key" {
-  name   = "certificates/gorlah.com/privkey.pem"
-  bucket = "gorlah"
+  name   = format(local.private-key, "gorlah.com")
+  bucket = local.bucket
 }
 
 resource "kubernetes_secret" "gorlah-com-tls-default" {
@@ -47,13 +53,13 @@ resource "kubernetes_secret" "gorlah-com-tls-default" {
 }
 
 data "google_storage_bucket_object_content" "mamamech-rocks-public-key" {
-  name   = "certificates/mamamech.rocks/fullchain.pem"
-  bucket = "gorlah"
+  name   = format(local.public-key, "mamamech.rocks")
+  bucket = local.bucket
 }
 
 data "google_storage_bucket_object_content" "mamamech-rocks-private-key" {
-  name   = "certificates/mamamech.rocks/privkey.pem"
-  bucket = "gorlah"
+  name   = format(local.private-key, "mamamech.rocks")
+  bucket = local.bucket
 }
 
 resource "kubernetes_secret" "mamamech-rocks-tls-default" {
