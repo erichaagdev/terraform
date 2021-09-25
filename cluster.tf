@@ -26,6 +26,11 @@ resource "google_container_node_pool" "primary-node-pool" {
   name       = "${var.cluster_name}-primary-node-pool"
   cluster    = google_container_cluster.cluster.name
   node_count = 1
+  version    = "1.20.9-gke.1001"
+
+  management {
+    auto_upgrade = false
+  }
 
   node_config {
     machine_type    = "e2-medium"
