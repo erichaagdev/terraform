@@ -75,3 +75,27 @@ resource "kubernetes_secret" "mamamech-rocks-tls-default" {
     "tls.key" = data.google_storage_bucket_object_content.mamamech-rocks-private-key.content
   }
 }
+
+data "google_storage_bucket_object_content" "erichaag-dev-public-key" {
+  name   = format(local.public-key, "erichaag.dev")
+  bucket = local.bucket
+}
+
+data "google_storage_bucket_object_content" "erichaag-dev-private-key" {
+  name   = format(local.private-key, "erichaag.dev")
+  bucket = local.bucket
+}
+
+resource "kubernetes_secret" "erichaag-dev-tls-default" {
+  type = "kubernetes.io/tls"
+
+  metadata {
+    name      = "erichaag-dev-tls-secret"
+    namespace = "default"
+  }
+
+  data = {
+    "tls.crt" = data.google_storage_bucket_object_content.erichaag-dev-public-key.content
+    "tls.key" = data.google_storage_bucket_object_content.erichaag-dev-private-key.content
+  }
+}
