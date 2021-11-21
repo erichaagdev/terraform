@@ -1,38 +1,41 @@
+# https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx
 resource "helm_release" "ingress-nginx" {
   repository       = "https://kubernetes.github.io/ingress-nginx"
   chart            = "ingress-nginx"
   name             = "ingress-nginx"
   namespace        = "ingress-nginx"
-  version          = "3.35.0"
+  version          = "4.0.9"
   create_namespace = true
 
+  depends_on = [google_container_node_pool.primary-node-pool]
+
   set {
-    name  = "controller.service.type"
-    value = "NodePort"
+    name  = "controller.hostNetwork"
+    value = true
   }
 
   set {
-    name  = "controller.service.nodePorts.http"
-    value = 32080
+    name  = "controller.hostPort.enabled"
+    value = true
   }
 
   set {
-    name  = "controller.service.nodePorts.https"
-    value = 32443
+    name  = "controller.kind"
+    value = "DaemonSet"
   }
 
   set {
-    name  = "controller.service.nodePorts.tcp.8080"
-    value = 32808
+    name  = "controller.reportNodeInternalIp"
+    value = true
   }
-}
 
-resource "null_resource" "assign-internal-ip" {
-  triggers = {
-    ingress_nginx     = helm_release.ingress-nginx.id
-    primary_node_pool = google_container_node_pool.primary-node-pool.id
+  set {
+    name  = "controller.service.enabled"
+    value = false
   }
-  provisioner "local-exec" {
-    command = "/bin/sh ./scripts/assign-internal-ip.sh ${var.cluster_name}-cluster ${data.google_client_config.current.zone}"
+
+  set {
+    name  = "controller.admissionWebhooks.enabled"
+    value = false
   }
 }

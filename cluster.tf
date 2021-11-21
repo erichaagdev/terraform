@@ -1,15 +1,19 @@
 resource "google_service_account" "service-account" {
-  account_id = "${var.cluster_name}-service-account"
+  account_id = "${local.cluster_name}-service-account"
 }
 
 resource "google_container_cluster" "cluster" {
-  name                     = "${var.cluster_name}-cluster"
+  name                     = "${local.cluster_name}-cluster"
   initial_node_count       = 1
   logging_service          = "none"
   monitoring_service       = "none"
   remove_default_node_pool = true
   network                  = google_compute_network.vpc.name
   subnetwork               = google_compute_subnetwork.subnet.name
+
+  resource_labels = {
+    cluster = "${local.cluster_name}-cluster"
+  }
 
   addons_config {
     http_load_balancing {
@@ -23,30 +27,21 @@ resource "google_container_cluster" "cluster" {
 }
 
 resource "google_container_node_pool" "primary-node-pool" {
-  name       = "${var.cluster_name}-primary-node-pool"
+  name       = "${local.cluster_name}-primary-node-pool"
   cluster    = google_container_cluster.cluster.name
-  node_count = 1
-  version    = "1.20.9-gke.1001"
-
-  management {
-    auto_upgrade = false
-  }
+  node_count = 3
 
   node_config {
-    machine_type    = "e2-medium"
+    machine_type    = "e2-micro"
     service_account = google_service_account.service-account.email
-    disk_size_gb    = 20
+    disk_size_gb    = 10
 
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
 
-    metadata = {
-      disable-legacy-endpoints = true
-    }
-
     tags = [
-      "${var.cluster_name}-node"
+      "${local.cluster_name}-node"
     ]
   }
 }
