@@ -30,14 +30,14 @@ resource "google_service_account_key" "node-pool-ip-controller" {
 
 resource "google_project_iam_binding" "node-pool-ip-controller" {
   project = google_project_iam_custom_role.node-pool-ip-controller.project
-  role = google_project_iam_custom_role.node-pool-ip-controller.name
+  role    = google_project_iam_custom_role.node-pool-ip-controller.name
 
   members = [
     "serviceAccount:${google_service_account.node-pool-ip-controller.email}",
   ]
 }
 
-resource "kubernetes_namespace" node-pool-ip-controller {
+resource "kubernetes_namespace" "node-pool-ip-controller" {
   metadata {
     name = "node-pool-ip-controller"
   }
