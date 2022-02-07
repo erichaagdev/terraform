@@ -24,6 +24,11 @@ resource "google_container_cluster" "cluster" {
       disabled = true
     }
   }
+
+  //noinspection MissingProperty
+  workload_identity_config {
+    workload_pool = "${data.google_client_config.default.project}.svc.id.goog"
+  }
 }
 
 resource "google_container_node_pool" "primary-node-pool" {
@@ -32,9 +37,9 @@ resource "google_container_node_pool" "primary-node-pool" {
   node_count = 1
 
   node_config {
-    machine_type    = "e2-micro"
+    machine_type    = "e2-medium"
     service_account = google_service_account.service-account.email
-    disk_size_gb    = 10
+    disk_size_gb    = 50
 
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"

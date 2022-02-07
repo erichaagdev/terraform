@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: erichaag-dev
+  namespace: ${namespace}
+spec:
+  secretName: erichaag-dev-tls
+  issuerRef:
+    name: letsencrypt
+  dnsNames:
+    - '*.erichaag.dev'
+    - 'erichaag.dev'
+  secretTemplate:
+    annotations:
+      kubed.appscode.com/sync: erichaag.dev/install-certificate

@@ -36,39 +36,12 @@ resource "google_dns_record_set" "erichaag-dev-email-dns" {
   ]
 }
 
-locals {
-  bucket      = "gorlah-certs"
-  private-key = "domains/%s/certificates/privkey.pem"
-  public-key  = "domains/%s/certificates/fullchain.pem"
-}
-
-data "google_storage_bucket_object_content" "erichaag-dev-public-key" {
-  name   = format(local.public-key, "erichaag.dev")
-  bucket = local.bucket
-}
-
-data "google_storage_bucket_object_content" "erichaag-dev-private-key" {
-  name   = format(local.private-key, "erichaag.dev")
-  bucket = local.bucket
-}
-
-resource "kubernetes_secret" "erichaag-dev-tls-default" {
-  type = "kubernetes.io/tls"
-
-  metadata {
-    name      = "erichaag-dev-tls-secret"
-    namespace = kubernetes_namespace.erichaag-dev.id
-  }
-
-  data = {
-    "tls.crt" = data.google_storage_bucket_object_content.erichaag-dev-public-key.content
-    "tls.key" = data.google_storage_bucket_object_content.erichaag-dev-private-key.content
-  }
-}
-
 resource "kubernetes_namespace" "erichaag-dev" {
   metadata {
     name = "erichaag-dev"
+    labels = {
+      "erichaag.dev/install-certificate" = ""
+    }
   }
 }
 
@@ -163,7 +136,7 @@ resource "kubernetes_ingress" "erichaag-dev" {
 
     tls {
       hosts       = ["erichaag.dev"]
-      secret_name = kubernetes_secret.erichaag-dev-tls-default.metadata[0].name
+      secret_name = "erichaag-dev-tls"
     }
   }
 }
