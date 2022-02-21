@@ -1,3 +1,20 @@
+terraform {
+  required_providers {
+    helm = {
+      source = "hashicorp/helm"
+    }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
+  }
+}
+
+resource "kubernetes_namespace" "ingress-nginx" {
+  metadata {
+    name = "ingress-nginx"
+  }
+}
+
 /*
   Deploys an ingress-nginx controller as a DaemonSet via the host network as described here:
   https://kubernetes.github.io/ingress-nginx/deploy/baremetal/#via-the-host-network
@@ -9,11 +26,9 @@ resource "helm_release" "ingress-nginx" {
   repository       = "https://kubernetes.github.io/ingress-nginx"
   chart            = "ingress-nginx"
   name             = "ingress-nginx"
-  namespace        = "ingress-nginx"
+  namespace        = kubernetes_namespace.ingress-nginx.metadata[0].name
   version          = "4.0.13"
-  create_namespace = true
-
-  depends_on = [google_container_node_pool.primary-node-pool]
+  create_namespace = false
 
   set {
     name  = "controller.hostNetwork"

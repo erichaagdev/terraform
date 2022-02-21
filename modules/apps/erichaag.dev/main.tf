@@ -1,3 +1,16 @@
+terraform {
+  required_providers {
+    google = {
+      source = "hashicorp/google-beta"
+    }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
+  }
+}
+
+data "google_client_config" "default" {}
+
 resource "google_dns_managed_zone" "erichaag-dev-dns-zone" {
   name     = "erichaag-dev-dns-zone"
   dns_name = "erichaag.dev."
@@ -9,7 +22,7 @@ resource "google_dns_record_set" "erichaag-dev-root-dns" {
   type         = "A"
   ttl          = 300
 
-  rrdatas = [google_compute_address.ip.address]
+  rrdatas = [var.cluster_ip]
 }
 
 resource "google_dns_record_set" "erichaag-dev-wildcard-dns" {
@@ -18,8 +31,9 @@ resource "google_dns_record_set" "erichaag-dev-wildcard-dns" {
   type         = "A"
   ttl          = 300
 
-  rrdatas = [google_compute_address.ip.address]
+  rrdatas = [var.cluster_ip]
 }
+
 
 resource "google_dns_record_set" "erichaag-dev-email-dns" {
   name         = google_dns_managed_zone.erichaag-dev-dns-zone.dns_name

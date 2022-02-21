@@ -1,5 +1,5 @@
 ```shell
-gcloud container clusters get-credentials coruscant-cluster
+gcloud container clusters get-credentials coruscant
 ```
 
 ```shell
