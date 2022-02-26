@@ -1,4 +1,9 @@
 terraform {
+  backend "gcs" {
+    bucket = "gorlah"
+    prefix = "terraform/state"
+  }
+
   required_providers {
     google = {
       source  = "hashicorp/google-beta"

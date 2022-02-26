@@ -6,9 +6,6 @@ terraform {
     kubectl = {
       source = "gavinbunney/kubectl"
     }
-    kubernetes = {
-      source = "hashicorp/kubernetes"
-    }
   }
 }
 
@@ -16,15 +13,16 @@ data "google_client_config" "default" {}
 
 resource "kubernetes_namespace" "certificates" {
   metadata {
-    name = "certificates"
+    name = var.install_namespace
   }
 }
 
 /*
-  Creates a certificate issuer in the certificates namespace.
+  Creates certificate issuers in the install namespace.
 */
 resource "kubectl_manifest" "certificate-issuer-staging" {
   yaml_body = templatefile("${path.module}/manifests/issuer-staging.yaml", {
+    email     = var.email
     namespace = kubernetes_namespace.certificates.metadata[0].name
     project   = data.google_client_config.default.project
   })
@@ -32,16 +30,8 @@ resource "kubectl_manifest" "certificate-issuer-staging" {
 
 resource "kubectl_manifest" "certificate-issuer" {
   yaml_body = templatefile("${path.module}/manifests/issuer.yaml", {
+    email     = var.email
     namespace = kubernetes_namespace.certificates.metadata[0].name
     project   = data.google_client_config.default.project
-  })
-}
-
-/*
-  Creates a wildcard certificate for erichaag.dev.
-*/
-resource "kubectl_manifest" "certificate" {
-  yaml_body = templatefile("${path.module}/manifests/certificate-staging.yaml", {
-    namespace = kubernetes_namespace.certificates.metadata[0].name
   })
 }

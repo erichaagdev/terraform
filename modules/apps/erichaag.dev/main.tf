@@ -1,53 +1,9 @@
 terraform {
   required_providers {
-    google = {
-      source = "hashicorp/google-beta"
-    }
     kubernetes = {
       source = "hashicorp/kubernetes"
     }
   }
-}
-
-data "google_client_config" "default" {}
-
-resource "google_dns_managed_zone" "erichaag-dev-dns-zone" {
-  name     = "erichaag-dev-dns-zone"
-  dns_name = "erichaag.dev."
-}
-
-resource "google_dns_record_set" "erichaag-dev-root-dns" {
-  name         = google_dns_managed_zone.erichaag-dev-dns-zone.dns_name
-  managed_zone = google_dns_managed_zone.erichaag-dev-dns-zone.name
-  type         = "A"
-  ttl          = 300
-
-  rrdatas = [var.cluster_ip]
-}
-
-resource "google_dns_record_set" "erichaag-dev-wildcard-dns" {
-  name         = "*.${google_dns_managed_zone.erichaag-dev-dns-zone.dns_name}"
-  managed_zone = google_dns_managed_zone.erichaag-dev-dns-zone.name
-  type         = "A"
-  ttl          = 300
-
-  rrdatas = [var.cluster_ip]
-}
-
-
-resource "google_dns_record_set" "erichaag-dev-email-dns" {
-  name         = google_dns_managed_zone.erichaag-dev-dns-zone.dns_name
-  managed_zone = google_dns_managed_zone.erichaag-dev-dns-zone.name
-  type         = "MX"
-  ttl          = 3600
-
-  rrdatas = [
-    "5 gmr-smtp-in.l.google.com.",
-    "10 alt1.gmr-smtp-in.l.google.com.",
-    "20 alt2.gmr-smtp-in.l.google.com.",
-    "30 alt3.gmr-smtp-in.l.google.com.",
-    "40 alt4.gmr-smtp-in.l.google.com.",
-  ]
 }
 
 resource "kubernetes_namespace" "erichaag-dev" {

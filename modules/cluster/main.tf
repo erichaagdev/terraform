@@ -59,7 +59,6 @@ resource "google_container_cluster" "cluster" {
     }
   }
 
-  //noinspection MissingProperty
   workload_identity_config {
     workload_pool = "${data.google_client_config.default.project}.svc.id.goog"
   }
