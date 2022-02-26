@@ -15,5 +15,5 @@ module "certificate" {
 
   domain            = each.value.domain
   install_namespace = module.certificate_issuers.install_namespace
-  issuer            = module.certificate_issuers.staging_issuer
+  issuer            = module.certificate_issuers.production_issuer
 }
