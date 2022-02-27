@@ -63,3 +63,10 @@ provider "kubectl" {
   load_config_file       = false
   cluster_ca_certificate = module.coruscant.cluster_certificate
 }
+
+provider "kubectl-fork" {
+  host                   = module.coruscant.cluster_endpoint
+  token                  = data.google_client_config.default.access_token
+  load_config_file       = false
+  cluster_ca_certificate = module.coruscant.cluster_certificate
+}
