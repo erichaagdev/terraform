@@ -9,22 +9,26 @@ terraform {
       source  = "hashicorp/google-beta"
       version = "4.9.0"
     }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.7.1"
-    }
     helm = {
       source  = "hashicorp/helm"
       version = "2.4.1"
     }
-
-    /*
-      Needed until this issue is resolved:
-      https://github.com/hashicorp/terraform-provider-kubernetes/issues/1380
-     */
+    http = {
+      source  = "hashicorp/http"
+      version = "2.1.0"
+    }
     kubectl = {
       source  = "gavinbunney/kubectl"
       version = "1.13.1"
+    }
+    kubectl-fork = {
+      // needed until https://github.com/gavinbunney/terraform-provider-kubectl/issues/109 is merged and released
+      source  = "alekc-forks/kubectl"
+      version = "1.13.1-1"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.7.1"
     }
   }
 

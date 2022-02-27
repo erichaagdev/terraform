@@ -8,8 +8,8 @@ spec:
   issuerRef:
     name: ${issuer}
   dnsNames:
-    - "*.${domain}"
-    - "${domain}"
+  - "*.${domain}"
+  - "${domain}"
   secretTemplate:
     annotations:
       kubed.appscode.com/sync: ${domain}/install-certificate

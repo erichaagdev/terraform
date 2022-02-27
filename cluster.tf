@@ -4,17 +4,22 @@ module "coruscant" {
 }
 
 module "cert-manager" {
-  source     = "./modules/apps/cert-manager"
+  source     = "./modules/clusterapps/cert-manager"
   depends_on = [module.coruscant]
 }
 
 module "config-syncer" {
-  source     = "./modules/apps/config-syncer"
+  source     = "./modules/clusterapps/config-syncer"
   depends_on = [module.coruscant]
 }
 
 module "ingress-nginx" {
-  source     = "./modules/apps/ingress-nginx"
+  source     = "./modules/clusterapps/ingress-nginx"
+  depends_on = [module.coruscant]
+}
+
+module "argocd" {
+  source     = "./modules/clusterapps/argocd"
   depends_on = [module.coruscant]
 }
 
